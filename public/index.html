@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>基于NodeJS网络实时聊天系统</title>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="/css/bootstrap.min.css" /><!-- 引入静态样式 -->
+  <link rel="stylesheet" href="/css/jquery-ui.min.css">
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<!-- 登录模块页面样式布局 -->
+<body>
+    <div class="container">
+    	<div class="row page1">
+			<div id="loginWrap" class="col-md-6 col-md-offset-3">
+				<div id="loginBox">
+					<form id="signinForm" class="form-signin" role="form" onsubmit="return false;">
+						<h2 class="form-signin-heading">登录</h2>
+						<div class="form-group"><input id="username" type="text" class="form-control" placeholder="Username" required="" autofocus=""></div>
+						<div class="form-group"><input id="userpassword" type="password" class="form-control" placeholder="Password" required=""></div>
+						<div style="text-align:right;"><a id="gotoSignup" href="javascript:;">还没有账号？注册</a></div>
+						<div class="form-group"><button id="loginBtn" class="btn btn-lg btn-primary btn-block">登录</button></div>
+					</form>
+					<p id="SignInErr"></p>
+				</div>
+			</div>
+
+			<div id="signupWrap" class="col-md-6 col-md-offset-3" style="display:none;">
+				<div id="signupBox">
+					<form id="signupForm" class="form-signin" role="form" onsubmit="return false;">
+						<h2 class="form-signin-heading">注册</h2>
+						<div class="form-group"><input id="upName" type="text" maxlength="5" class="form-control" placeholder="Username" required="" /></div>
+						<div class="form-group"><input id="upPassword" type="password" maxlength="6" class="form-control" placeholder="Password" required="" /></div>
+						<div style="text-align:right;"><a id="gotoLogin" href="javascript:;">返回登录</a></div>
+						<div class="form-group"><button id="signupBtn" class="btn btn-lg btn-primary btn-block">注册</button></div>
+					</form>
+					<p id="SignUpErr"></p>
+				</div>
+			</div>
+      	</div>
+	
+		<!-- 聊天室页面样式布局 -->
+		<div id="main" class="row hidden">
+			<div class="col-md-3">
+				<div id="sideBar">
+					<div id="userInfo">
+						<img class="headImg" />
+						<div id="weather"></div>
+					</div>
+					<div id="control" style="display:none;">
+						<div>
+							<span id="gloableName"></span>
+							<br>
+							<em></em>
+						</div>
+						<hr>
+						<ul>
+							<li id="set"><i class="glyphicon glyphicon-cog"></i>&nbsp;&nbsp;Setting</li>
+							<li id="changeUser"><i class="glyphicon glyphicon-transfer"></i>&nbsp;&nbsp;Switch</li>
+							<li id="logout"><i class="glyphicon glyphicon-off"></i>&nbsp;&nbsp;Logout</li>
+						</ul>
+					</div>
+
+					<ul id="setContent" style="display: none">
+						<li><i class="glyphicon glyphicon-eye-close"></i><em>&nbsp;&nbsp;Update Password</em></li>
+						<li><i class="glyphicon glyphicon-tags"></i><em>&nbsp;&nbsp;Personal Sign </em></li>
+						<li><i class="glyphicon glyphicon-user"></i><em>&nbsp;&nbsp;Head Portrait </em></li>
+					</ul>
+
+					<div id="setOne" style="display:none;">
+						<input type="password" placeholder="Old Password" maxlength="6" id="oldpass" />
+						<input type="password" placeholder="New Password" maxlength="6" id="newpass" />
+						<p></p>
+					</div>
+					<div id="setTwo" style="display: none;">
+						<input type="text" placeholder="write something will well" maxlength="16" />
+						<p></p>
+					</div>
+					<div id="setThree" style="display:none;">
+						<p>*Double click the picture to select</p>
+						<div id="imgContent">
+							<ul>
+							</ul>
+						</div>
+					</div>
+					<div id="chatChange">
+						<ul id="selectmenu">
+							<li>Square</li>
+							<li>Choose Room</li>
+							<li><ul id="selectRoom" style="display: none;">
+								<li><img src="/img/firsthead.jpg" alt="" /><span>East</span></li>
+								<li><img src="/img/secondhead.jpg" alt=""><span>West</span></li>
+							</ul></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div id="chatBox">
+					<div id="headmessages"><strong>Square</strong></div>
+					<div id="content"><ul id="messages"></ul></div>
+					<div id="chatbottom">
+						<div class="actionbar">
+							<span class="emotion" title="插入表情"><i class="glyphicon glyphicon-picture"></i></span>
+							<span id="clear" title="清空聊天窗口"><i class="glyphicon glyphicon-refresh"></i></span>
+							<span id="chatRecord" title="聊天历史消息"><i class="glyphicon glyphicon-time"></i></span>
+						</div>
+						<form id="chatMsgForm" onsubmit="return false;">
+							<textarea id="msg" rows="5" cols="35" maxlength="161" placeholder="Enter the content here, you can enter 161 characters at most ~">
+							</textarea>
+							<button id="send" class="btn btn-default"><i class="glyphicon glyphicon-send"></i></button>
+						</form>
+					</div>
+				</div>
+				<div id="model">
+				</div>
+			</div>
+
+
+
+			<div class="col-md-3">
+
+				<div id="rightSide">
+					<span id="membersTitle">Members Information</span>
+					<div id="Allmembers">
+						<div>
+							<i></i>
+							<span>All Members</span>
+							<span id="oncount"></span>/<span id="allcount"></span>
+						</div>
+						<ul id="AllOnline"></ul>
+						<ul id="AllOutline"></ul>
+					</div>
+					<div id="Roommembers">
+						<div>
+							<i></i>
+							<span>Room Members</span>
+							<span id="roomCount"></span>
+						</div>
+						<ul>
+						</ul>
+					</div>
+				</div>
+				<div id="oldMsg" style="display: none;">
+					<span id="oldMsgHead" title="关闭历史消息窗口"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;&nbsp;MsgHistory</span>
+					<ul></ul>
+					<span id="clearoldMsg"><i title="清空聊天历史消息" class="glyphicon glyphicon-trash"></i></span>
+				</div>
+			</div>
+
+		</div>
+    </div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/jquery.js"></script>
+<script src="/js/jquery-ui.min.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/jquery.qqFace.js"></script>
+</body>
+
+</html>
